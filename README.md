@@ -26,14 +26,15 @@ articles, and off-topic bids), and delivers:
 1. **A CSV spreadsheet** — `output/rfps_<date>.csv`, sorted by deadline, with the
    organization, due date, estimated value, source link, and a one-line scope.
    The file is sent to you so you can open it on web or mobile.
-2. **A Slack summary** — posted to **#propellantmediasales**, grouped by vertical
-   with the top opportunities and links.
+2. **A Slack summary** — sent as a **direct message to you (Justin Croxton)**,
+   grouped by vertical with the top opportunities and links. Pass a channel name
+   if you'd rather post it to a channel.
 
 ### Options
 
 ```
 /find-rfps healthcare,tourism        # only search specific verticals
-/find-rfps #my-channel               # post the summary to a different channel
+/find-rfps #propellantmediasales     # post to a channel instead of DMing you
 /find-rfps --no-slack                # just produce the CSV, skip Slack
 ```
 
