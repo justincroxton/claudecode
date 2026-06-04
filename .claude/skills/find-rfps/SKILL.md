@@ -24,6 +24,8 @@ end without asking unnecessary questions. Only ask if genuinely blocked.
   Croxton** (`U57HCS3K8`). Accepts a channel like `#propellantmediasales`
   (`C56P28H4J`) if the user wants it posted to a channel instead.
 - `--no-slack` — skip the Slack post (still writes the CSV).
+- `--no-email` — skip the Gmail inbox scan (web search only).
+- `--no-web` — skip the web search (inbox sources only).
 
 ## The six verticals + what counts as a hit
 
@@ -69,6 +71,37 @@ Run **3–5 queries per vertical**. When a promising result lacks a deadline or
 issuer, use `WebFetch` on the listing to confirm it is a real, open marketing RFP
 and to pull the due date, issuing organization, and a one-line scope.
 
+## Email sources (Gmail inbox scan)
+
+Unless `--no-email`, also scan Justin's Gmail for two paid RFP-alert
+subscriptions he receives. These are high-signal — RFPMart even has a dedicated
+marketing category — so treat them as first-class sources alongside web search.
+Use `search_threads` to find recent alerts, then `get_thread` with
+`messageFormat: FULL_CONTENT` to read the listings out of each email body.
+
+**RFPMart** — search `from:rfpmart.com newer_than:30d`. Two senders:
+- `alerts@rfpmart.com` — category digest emails. **Prioritize** subjects
+  containing *Marketing, Branding, Social Media, Digital Marketing, Public
+  Relations* (the `MRB-` series) and *Social Media, Internet and Digital
+  Marketing, SEO, SEM* (the `SEO-` series). **Skip** off-topic categories
+  (Auditing/Finance, etc.). Each email body lists multiple RFPs with title,
+  issuing org/state, and a link.
+- `rfp-alerts@rfpmart.com` — "Daily RFP Notification" digests with a link to each
+  matched RFP at the bottom of the body.
+
+**RFP School Watch** — search `from:rfpschoolwatch-bids.com newer_than:30d`
+(sender `bids@rfpschoolwatch-bids.com`, subject "RFPSchoolwatch Daily Bid Alert").
+Bid data is in the email body; the full detail (including due dates) is in an
+attached PDF. Read the body first; if a due date or scope is missing, read the
+PDF attachment via `get_thread` FULL_CONTENT. (Ignore marketing/newsletter mail
+from `content@rfpschoolwatch.com` — those are not bid alerts.)
+
+For every RFP pulled from these emails: classify it into one of the six verticals
+(drop anything that fits none), apply the same marketing-scope and open-deadline
+filters below, capture the source link from the email, and set the CSV `source`
+column to `RFPMart` or `RFPSchoolWatch`. Scan the last ~30 days of alerts and
+de-duplicate across emails and against the web results.
+
 ## Filtering rules
 
 Keep a result only if **all** hold:
@@ -90,11 +123,12 @@ this exact header and one row per kept opportunity, sorted by `due_date` ascendi
 (unknown dates last):
 
 ```
-vertical,title,organization,location,due_date,estimated_value,source_url,posted_date,summary
+vertical,title,organization,location,due_date,estimated_value,source,source_url,posted_date,summary
 ```
 
 - `due_date` / `posted_date`: ISO `YYYY-MM-DD` when known, else `unknown`.
 - `estimated_value`: contract value/budget if stated, else blank.
+- `source`: where it came from — `RFPMart`, `RFPSchoolWatch`, or `Web`.
 - `summary`: one sentence on the scope of work.
 - Quote/escape fields properly (use Python's `csv` module via a quick Bash
   `python3` script, not hand-rolled string joining, so commas/quotes are safe).

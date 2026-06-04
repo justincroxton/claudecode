@@ -19,7 +19,10 @@ In Claude Code (web, desktop, or CLI), just run:
 /find-rfps
 ```
 
-Claude then does a fresh live web search across all six verticals, filters for
+Claude then pulls opportunities from three places — a fresh live **web search**
+across all six verticals, plus your two paid email subscriptions, **RFPMart**
+(`alerts@rfpmart.com` / `rfp-alerts@rfpmart.com`) and **RFP School Watch**
+(`bids@rfpschoolwatch-bids.com`) scanned straight from your Gmail — filters for
 real **open** marketing/advertising/media RFPs (dropping expired ones, news
 articles, and off-topic bids), and delivers:
 
@@ -36,9 +39,12 @@ articles, and off-topic bids), and delivers:
 /find-rfps healthcare,tourism        # only search specific verticals
 /find-rfps #propellantmediasales     # post to a channel instead of DMing you
 /find-rfps --no-slack                # just produce the CSV, skip Slack
+/find-rfps --no-email                # web search only, skip the inbox scan
+/find-rfps --no-web                  # inbox sources only (RFPMart + RFP School Watch)
 ```
 
-No API keys or setup required — Claude performs the searches each time you run it.
+No API keys or setup required — Claude performs the searches and reads the alert
+emails each time you run it.
 
 The command itself lives in [`.claude/skills/find-rfps/SKILL.md`](.claude/skills/find-rfps/SKILL.md);
 edit that file to tune the verticals, search queries, filtering rules, or output.
