@@ -64,6 +64,8 @@ production studios, call centers).
    mandatory requirements (registration, certifications, insurance/bonding,
    set-asides such as minority/woman/veteran-owned, mandatory pre-bid meetings,
    local presence), submission format, and incumbent agency if named.
+   For a fuller write-up, also answer the vertical's question set in
+   `.claude/skills/daily-rfps/template.md` (the shared Propellant template).
 5. **Score it** with the rubric below into an overall **Bid-Fit score (0–100)**
    and a recommendation: **BID / MAYBE / PASS**.
 
