@@ -34,6 +34,15 @@ advertising / media buying / digital / creative / branding / communications /
 public relations / SEO / web / social** services. Ignore RFPs for unrelated
 goods/services (construction, IT hardware, legal, etc.).
 
+**Always exclude (even if marketing-adjacent):**
+- **Event-specific RFPs** — event production, coordination, management, or
+  promotion of a single named event (e.g., "fly-buy event," festival/expo
+  production, one-off event services). Ongoing destination/brand marketing is
+  fine even if it references an event calendar.
+- **Airport advertising-concession / ad-space-lease RFPs** — these hire a
+  concessionaire to sell/operate ad space, not a marketing agency. (Keep true
+  airport *marketing / advertising / air-service-development* RFPs.)
+
 | Vertical | Typical issuers | Vertical-specific signals |
 |----------|-----------------|---------------------------|
 | **Higher education** | universities, colleges, community colleges, university systems, foundations | enrollment marketing, student recruitment, brand campaign, lead generation |
