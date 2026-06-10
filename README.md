@@ -20,11 +20,13 @@ In Claude Code (web, desktop, or CLI), just run:
 ```
 
 Claude then pulls opportunities from three places — a fresh live **web search**
-across all six verticals, plus your two paid email subscriptions, **RFPMart**
-(`alerts@rfpmart.com` / `rfp-alerts@rfpmart.com`) and **RFP School Watch**
-(`bids@rfpschoolwatch-bids.com`) scanned straight from your Gmail — filters for
-real **open** marketing/advertising/media RFPs (dropping expired ones, news
-articles, and off-topic bids), and delivers:
+across all six verticals (including bid portals like BidBanana, PlanetBids,
+Bonfire, BidNet, DemandStar, and direct `.edu` university procurement pages),
+plus your two paid email subscriptions, **RFPMart** (`alerts@rfpmart.com` /
+`rfp-alerts@rfpmart.com`) and **RFP School Watch** (`bids@rfpschoolwatch-bids.com`)
+scanned straight from your Gmail — filters for real **open**
+marketing/advertising/media RFPs (dropping expired ones, news articles, and
+off-topic bids), and delivers:
 
 1. **A CSV spreadsheet** — `output/rfps_<date>.csv`, sorted by deadline, with the
    organization, due date, estimated value, source link, and a one-line scope.

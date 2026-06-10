@@ -64,8 +64,21 @@ Also sweep the common bid aggregators / portals (search within them):
 - `site:governmentbids.com marketing agency`
 - `site:findrfp.com advertising marketing`
 - `site:demandstar.com marketing`
+- `site:thebidbanana.com marketing OR advertising OR "media buying"` (BidBanana)
+- `site:planetbids.com marketing OR advertising OR branding RFP` (PlanetBids — many city/county/college portals)
+- `site:bonfirehub.com marketing OR advertising OR "media buying" RFP` (Bonfire)
 - `bidnet / BidNet Direct, DemandStar, Periscope S2G / BidSync, OpenGov procurement`
 - State procurement portals (e.g. eVA Virginia, Cal eProcure, Texas SmartBuy, Florida MyFloridaMarketPlace) when a query points to one.
+
+Higher-education sweep — also run explicit `.edu` queries so we catch RFPs hosted
+directly on university procurement pages, e.g.:
+- `site:edu "request for proposal" marketing OR advertising OR "enrollment marketing" 2026`
+- `site:edu RFP "media buying" OR "creative services" OR "agency of record" 2026`
+
+Note on BidBanana / PlanetBids / Bonfire: search their public/indexed listing
+pages only. Do NOT attempt to log in or use any stored credentials. If a
+listing requires authentication to view detail, capture what is public and note
+"login required" in the summary.
 
 Run **3–5 queries per vertical**. When a promising result lacks a deadline or
 issuer, use `WebFetch` on the listing to confirm it is a real, open marketing RFP
@@ -140,10 +153,12 @@ it on web/mobile.
 
 Unless `--no-slack`, post one message to the target destination (default is a
 **direct message to Justin Croxton** / `U57HCS3K8`) using `slack_send_message`.
-Send DMs by passing the user ID `U57HCS3K8` as the channel. Format:
+Send DMs by passing the user ID `U57HCS3K8` as the channel. **Always begin the
+message with the Slack mention token `<@U57HCS3K8>`** (literal angle brackets,
+not markdown) so it pushes a real notification to Justin. Format:
 
 ```
-:mag: *RFP scan — <Mon DD, YYYY>* — <N> open marketing opportunities
+<@U57HCS3K8> :mag: *RFP scan — <Mon DD, YYYY>* — <N> open marketing opportunities
 
 *Higher education (<n>)*
 • <Title> — <Organization> — due <date> — <url>
