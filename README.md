@@ -1,8 +1,18 @@
-# Propellant Media — RFP Finder
+# Propellant Media — RFP Finder & Qualifier
 
-A "one button" tool that searches the web for **open marketing/advertising RFP
-opportunities** for [Propellant Media](https://propellant.media) across six
-target verticals:
+A two-command pipeline for [Propellant Media](https://propellant.media):
+
+1. **`/find-rfps`** — finds open marketing/advertising RFP opportunities across six
+   target verticals and delivers a CSV + Slack summary.
+2. **`/qualify-rfps`** — reads RFP documents you drop in a Google Drive folder,
+   scores each against Propellant's services, and writes a **bid brief** with a
+   **BID / MAYBE / PASS** recommendation.
+
+```
+/find-rfps   →   you pick promising ones, drop the docs in Drive   →   /qualify-rfps   →   hand the briefs to a Claude Project to decide & draft
+```
+
+Six target verticals:
 
 - Higher education
 - Tourism
@@ -11,7 +21,7 @@ target verticals:
 - Public health
 - Healthcare
 
-## How to use it (the button)
+## 1. Find — `/find-rfps`
 
 In Claude Code (web, desktop, or CLI), just run:
 
@@ -50,6 +60,30 @@ emails each time you run it.
 
 The command itself lives in [`.claude/skills/find-rfps/SKILL.md`](.claude/skills/find-rfps/SKILL.md);
 edit that file to tune the verticals, search queries, filtering rules, or output.
+
+---
+
+## 2. Qualify — `/qualify-rfps`
+
+Drop any RFP document (PDF/Doc/Word) into your Google Drive folder
+**"RFPs - To Review"**, then run:
+
+```
+/qualify-rfps           # qualify all new docs in the folder
+/qualify-rfps --slack   # also DM you a BID/MAYBE/PASS summary
+```
+
+Claude reads each RFP, scores it against Propellant's services with a weighted
+bid-fit rubric, and writes a **bid brief** (BID / MAYBE / PASS + score + rationale,
+scope mapped to your services, requirements, flags) into your **"RFPs - Qualified"**
+Drive folder, plus a running **"RFP Bid Scorecard"** sheet.
+
+**The hand-off:** add the "RFPs - Qualified" Drive folder to a **Claude Project**
+(e.g. "Bid Decisions") to go deeper on any BID/MAYBE and draft the proposal — the
+briefs are already there as the Project's knowledge. *Code finds & qualifies; the
+Project decides & writes.*
+
+The command lives in [`.claude/skills/qualify-rfps/SKILL.md`](.claude/skills/qualify-rfps/SKILL.md).
 
 ---
 
