@@ -104,20 +104,4 @@ Send Slack DM to U57HCS3K8. Format the message as:
 🎯 *Top Revenue Concentration (Last 90 Days)*
 - [Customer 1]: $[X] ([Y]% of revenue)
 - [Customer 2]: $[X] ([Y]% of revenue)
-- [Customer 3]: $[X] ([Y]% of revenue)
-- [Customer 4]: $[X] ([Y]% of revenue)
-- [Customer 5]: $[X] ([Y]% of revenue)
-- ⚠️ Concentration flag: [any single customer >15% of revenue, or "none"]
-
-📈 *Forward Revenue — HubSpot SDA Pipeline*
-- Total open pipeline: $[X]
-- Weighted pipeline: $[Y]
-- Deals closing this month: $[Z] ([N] deals)
-- Deals closing next month: $[A] ([N] deals)
-- Closed Won this month vs last month: $[X] vs $[Y]
-
-🚦 *YTD Revenue Pacing*
-- Booked YTD: $[X]
-- Current 3-month run rate: $[Y]/month (target $850K/month)
-- Variance vs target: [+/- $Z]/month
-- Projected year-end: $[A] (target $10.2M)
+- [Customer 3]: $
