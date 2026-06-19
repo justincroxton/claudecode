@@ -8,3 +8,6 @@ venv/
 output/
 *.csv
 !sample_*.csv
+
+# Generated bundle for the landing-page template (rebuildable from source)
+geofencing-landing-template.zip
