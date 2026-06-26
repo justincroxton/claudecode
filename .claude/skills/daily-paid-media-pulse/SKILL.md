@@ -25,6 +25,11 @@ NOT a full audit. Do not produce the long report format.
   `date`, `spend`, `conversions`, `cost_per_conversion`, `clicks`.
 - **CPL:** compute as total window spend ÷ total window conversions. Do NOT
   average the daily `cost_per_conversion` field — it skews on low-volume days.
+- **Florida Gulf Coast University (watched account):** always give FGCU a full
+  account block, even when it falls under the ~30-conversion low-data
+  threshold. Do NOT relegate it to the low-data footnote. FGCU runs thin volume
+  with frequent zero-conversion days, so when data is sparse, frame it as a
+  likely conversion-tracking issue to verify — not a performance read.
 
 ---
 
@@ -68,7 +73,10 @@ Guardrails (keep this honest):
 - Never call a CPL move good or bad without the volume behind it. A lower CPL
   on collapsing volume is not a win.
 - If an account has too little data to read (under ~30 conversions in the
-  window), say so instead of over-reading noise.
+  window), say so instead of over-reading noise. EXCEPTION: Florida Gulf Coast
+  University is a watched account — always give it a full block regardless of
+  volume, and when its data is thin or shows zero-conversion days, flag it as a
+  likely conversion-tracking issue to verify rather than calling performance.
 
 **Step 2 — Deliver to Slack (required):** Post the finished pulse as a Slack
 direct message to Justin Croxton (email `justin@propellant.media`). First look
