@@ -14,15 +14,19 @@ than the globally-installed version; the draft stage uses this one).
 | `04b_process_improvements_standards.md` | SOP — process improvements & standards |
 | `04c_policy_adoption_memo.md` | SOP — team policy adoption memo |
 | `05_compliance_obligation_extraction.md` | Compliance Master — obligation-extraction protocol |
+| `06_winning_proposals/` (5) | **Winning/Pitch Proposals** — Colorado School of Mines (WIN), NECC26MKT01 (WIN), Univ. of Wyoming MBA (PITCH), WorWic (PITCH), STCC (PITCH) |
 | `07_divider_mapping.txt` | Divider Mapping (21 dividers + AA–AD front matter) |
 | `rfp-engine_SKILL_v4.md` | The v4 engine spec (build enforcement, full-bleed dividers, Canonical Case Study Library) |
 
-## Still needed ⬜
+## Still needed ⬜ (optional / .docx-only)
 | Expected | Doc | Powers |
 |---|---|---|
-| `06_winning_proposals/` | **Winning Proposals** (files with PITCH / WIN in the name) | Parkland (perfect-format ref), Carlow, CU Boulder, Utah State, AB Tech, CCA — structure/pricing patterns. **← Justin's final batch** |
+| `dividers/` art (PNG/JPG, ~25 files) | Divider images referenced by `07_divider_mapping.txt` | Needed ONLY for the polished **.docx** full-bleed build (binary art). Questions-Answered + section-text drafting work without them. |
 | `03_win_loss_feedback.*` | Win-Loss Feedback (optional) | Full loss corpus. The 7 loss patterns already live in `rfp-engine_SKILL_v4.md`, so this is enrichment, not a blocker. |
-| `dividers/` art (PNG/JPG) | Divider images referenced by `07_divider_mapping.txt` | Needed ONLY for the polished **.docx** full-bleed build (binary art — not yet uploaded). Section-text drafting works without them. |
+
+**Status: drafting knowledge base COMPLETE.** The engine can now produce full-fidelity
+Questions-Answered docs and section-by-section proposal text. Only the divider art images remain,
+and only for the final Word/PDF render.
 
 ## Fidelity
 - With #1, #2 and the v4 skill present → drafting produces the **Questions-Answered doc** and
