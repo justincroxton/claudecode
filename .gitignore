@@ -8,3 +8,14 @@ venv/
 output/
 *.csv
 !sample_*.csv
+
+# RFP pipeline runtime data (keep the dirs + code, ignore the contents)
+pipeline/inbox/*
+pipeline/scored/*
+pipeline/reviewed/*
+pipeline/approved/*
+pipeline/drafts/*
+pipeline/logs/*
+pipeline/tmp/*
+pipeline/archive/*
+!pipeline/**/.gitkeep

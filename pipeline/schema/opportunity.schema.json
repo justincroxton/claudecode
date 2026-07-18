@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Propellant RFP Opportunity",
+  "description": "The record every pipeline stage reads and writes. The scanner emits the base fields; later stages add score/review/draft blocks.",
+  "type": "object",
+  "required": ["id", "source", "buyer", "title", "bucket", "url", "first_seen", "dedup_key"],
+  "properties": {
+    "id":          { "type": "string", "description": "Stable file id, e.g. 2026-06-25-a1b2c3d4" },
+    "dedup_key":   { "type": "string", "description": "Normalized key used to dedup against archive/" },
+    "source":      { "type": "string", "enum": ["RFPMart", "RFPSchoolWatch", "Web", "Other"] },
+    "source_ref":  { "type": "string", "description": "RFP number / R-ref / solicitation id if known" },
+    "buyer":       { "type": "string", "description": "Issuing organization (best-effort if source hides it)" },
+    "title":       { "type": "string" },
+    "bucket":      { "type": "string", "enum": ["higher_education", "k12", "public_health_healthcare", "government_tourism", "other"] },
+    "location":    { "type": "string" },
+    "due_date":    { "type": "string", "description": "YYYY-MM-DD or 'unknown'" },
+    "posted_date": { "type": "string", "description": "YYYY-MM-DD or 'unknown'" },
+    "est_value":   { "type": "string" },
+    "url":         { "type": "string", "description": "Real listing/doc URL, issuer portal, or one-click lookup — never empty" },
+    "summary":     { "type": "string", "description": "One sentence scope of work" },
+    "first_seen":  { "type": "string", "description": "ISO date the scanner first ingested it" },
+    "stage":       { "type": "string", "enum": ["inbox", "scored", "reviewed", "approved", "drafted"], "default": "inbox" },
+
+    "score":  { "type": "object", "description": "Added by 02_score (rfp-engine bid/no-bid)",
+      "properties": {
+        "recommendation": { "type": "string", "enum": ["BID", "MAYBE", "PASS"] },
+        "fit_score":      { "type": "number", "minimum": 0, "maximum": 100 },
+        "rationale":      { "type": "string" },
+        "disqualifiers":  { "type": "array", "items": { "type": "string" } },
+        "scored_at":      { "type": "string" }
+      }
+    },
+    "review": { "type": "object", "description": "Added by 03_review (red-flag critique of the score)",
+      "properties": {
+        "verdict":        { "type": "string", "enum": ["AGREE", "DOWNGRADE", "UPGRADE", "NEEDS_HUMAN"] },
+        "missed_flags":   { "type": "array", "items": { "type": "string" } },
+        "notes":          { "type": "string" },
+        "reviewed_at":    { "type": "string" }
+      }
+    }
+  }
+}

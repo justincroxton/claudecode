@@ -12,6 +12,24 @@ them, and stage material in Drive** so the Project can score it.
 Designed to run unattended on a daily schedule, so be efficient and idempotent
 (never re-post or re-stage an opportunity already handled on a previous day).
 
+## ⚙️ Pipeline mode (current output contract) — READ FIRST
+
+The scanner's output has been refactored. As the **scan stage of the RFP pipeline**
+(`pipeline/`), this run's ONLY output is **candidate opportunities written as JSONL**;
+dedup, scoring, review, and Slack are now separate downstream stages.
+
+- Do the Step 1 scan + filtering below, but **classify into the five pipeline buckets**
+  (`higher_education | k12 | public_health_healthcare | government_tourism | other`) and
+  **write one JSON object per line to `pipeline/tmp/candidates.jsonl`** in the shape defined
+  by `pipeline/schema/opportunity.schema.json` (see `pipeline/prompts/scan.md` — the canonical
+  scanner spec). Every object needs a non-empty `title` and `url`.
+- **Do NOT dedup and do NOT post to Slack here.** `pipeline/stages/lib/ingest.py` dedups the
+  candidates against `pipeline/archive/` and writes new ones to `pipeline/inbox/`; the
+  `digest` stage owns Slack (#rfp_opportunities). Run the whole thing with `./run.sh`.
+
+Steps 3 (Drive staging) and 4 (Slack DM) below are the **legacy standalone behavior** — kept
+for reference / manual one-off runs, but superseded by the pipeline in normal operation.
+
 ## People & places (hard-coded)
 
 - **Slack — Justin Croxton**: `U57HCS3K8`
