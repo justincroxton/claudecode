@@ -19,3 +19,8 @@ pipeline/logs/*
 pipeline/tmp/*
 pipeline/archive/*
 !pipeline/**/.gitkeep
+
+# rfp-engine knowledge base — proprietary win/loss + client docs (keep README only)
+pipeline/knowledge/*
+!pipeline/knowledge/README.md
+!pipeline/knowledge/.gitkeep

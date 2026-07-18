@@ -3,6 +3,17 @@
 For every opportunity a human has moved into `pipeline/approved/`, run the FULL `rfp-engine`
 skill drafting lifecycle. This is the heavy stage and runs only on human-approved winners.
 
+## Knowledge base check FIRST
+The `rfp-engine` skill needs five knowledge docs (Questions Checklist, Section Instruction
+Template, Win-Loss Feedback, SOP, Winning Proposals). Check `pipeline/knowledge/`:
+- **If present** — load them and draft at FULL fidelity: complete Questions-Checklist answers,
+  the templated Poppins `.docx` per the Section Instruction Template, and winning-proposal
+  structures/pricing models.
+- **If absent** (only README/.gitkeep) — draft at PARTIAL fidelity (outline + bid analysis +
+  loss-pattern flags), and clearly stamp each output "PARTIAL — pending knowledge docs" with a
+  pointer to `pipeline/knowledge/README.md`. Do NOT fabricate the checklist answers or winning
+  structures you don't have.
+
 ## Procedure
 1. List `pipeline/approved/*.json` (skip `.gitkeep`). For each:
 2. **Invoke the `rfp-engine` skill** to run its full lifecycle on this opportunity: intake
