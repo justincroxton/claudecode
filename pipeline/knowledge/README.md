@@ -9,17 +9,20 @@ than the globally-installed version; the draft stage uses this one).
 | File | Doc |
 |---|---|
 | `01_questions_checklist.md` | Questions Checklist (Higher-Ed + Government intake questions) |
-| `02_section_template_v12.md` | **Section Instruction Template v12** — the "section builder": per-section tone/length/content/win-loss rules |
-| `rfp-engine_SKILL_v4.md` | The v4 engine spec (build-time enforcement, full-bleed dividers, Canonical Case Study Library) |
+| `02_section_template_v12.md` | **Section Instruction Template v12** — the "section builder" |
+| `04a_velocity_methodology_guide.md` | SOP — RFP pipeline velocity methodology |
+| `04b_process_improvements_standards.md` | SOP — process improvements & standards |
+| `04c_policy_adoption_memo.md` | SOP — team policy adoption memo |
+| `05_compliance_obligation_extraction.md` | Compliance Master — obligation-extraction protocol |
+| `07_divider_mapping.txt` | Divider Mapping (21 dividers + AA–AD front matter) |
+| `rfp-engine_SKILL_v4.md` | The v4 engine spec (build enforcement, full-bleed dividers, Canonical Case Study Library) |
 
-## Still needed ⬜ (Justin uploading next)
+## Still needed ⬜
 | Expected | Doc | Powers |
 |---|---|---|
-| `03_win_loss_feedback.*` | Win-Loss Feedback | The 7 loss patterns tied to source losses (Empire State, NDSU, CU Boulder, Slate…) |
-| `04_sop_lifecycle.*` | SOP | 10-phase lifecycle + red-flag checklist |
-| `05_compliance_master.*` | Compliance Master | State-registration pre-check + submission compliance |
-| `06_winning_proposals/` | Winning Proposals | **Parkland** (perfect-format ref), **Carlow**, **CU Boulder** (newest/best), Utah State, AB Tech, CCA |
-| `07_divider_mapping.txt` + `dividers/` art | Divider Mapping + divider images | Required only for the full **.docx build** (section→divider matching, full-bleed pages) |
+| `06_winning_proposals/` | **Winning Proposals** (files with PITCH / WIN in the name) | Parkland (perfect-format ref), Carlow, CU Boulder, Utah State, AB Tech, CCA — structure/pricing patterns. **← Justin's final batch** |
+| `03_win_loss_feedback.*` | Win-Loss Feedback (optional) | Full loss corpus. The 7 loss patterns already live in `rfp-engine_SKILL_v4.md`, so this is enrichment, not a blocker. |
+| `dividers/` art (PNG/JPG) | Divider images referenced by `07_divider_mapping.txt` | Needed ONLY for the polished **.docx** full-bleed build (binary art — not yet uploaded). Section-text drafting works without them. |
 
 ## Fidelity
 - With #1, #2 and the v4 skill present → drafting produces the **Questions-Answered doc** and

@@ -1,0 +1,242 @@
+PROPELLANT MEDIA - RFP SECTION DIVIDER MAPPING
+================================================
+Version 2.0 | May 2026
+Source of truth for divider PNG/JPG-to-section assignments
+Used by: rfp-engine skill (auto-insertion logic)
+Edited by: Justin Croxton, Erin Brantley, Diana Woodruff
+
+INSTRUCTIONS FOR USE
+--------------------
+This file maps each divider image to the exact section it belongs to.
+The rfp-engine skill reads this file when inserting full-page section
+dividers into RFP draft documents.
+
+If an RFP requires a section that does NOT match any divider here:
+  -> Insert divider_21_sample_divider_placeholder.png
+  -> Add the missing section to the "Custom Dividers Punch List"
+     at the top of the draft so Diana knows what to design
+
+ALL FILES LIVE IN: /mnt/project/ (project knowledge)
+
+
+GLOBAL DIVIDER FORMATTING RULES (APPLIES TO ALL DIVIDERS)
+==========================================================
+
+- Page size: 8.5 x 11 inches (US Letter)
+- Position: x-axis 0, y-axis 0 (top-left corner of page)
+- Sizing: Fit to page (full bleed - 612pt x 792pt at 72 DPI,
+  or 8.5" x 11" exact)
+- Image wrapping: Behind text (BEHIND_DOCUMENT) for text-overlay dividers
+- Image wrapping: In line with text (full page, no wrap) for static dividers
+- Page break: Both before AND after every divider so it occupies
+  its own page
+
+TWO TYPES OF DIVIDERS
+======================
+
+TYPE 1 - STATIC DIVIDERS (most common)
+  - Filename does NOT contain "text_overlay"
+  - Image renders full-page in-line
+  - No text rendered on top
+  - Use ImageRun with full-page transformation
+
+TYPE 2 - TEXT-OVERLAY DIVIDERS (special)
+  - Filename CONTAINS "text_overlay"
+  - Image renders behind document (BEHIND_DOCUMENT wrap)
+  - Dynamic text renders ON TOP of image with absolute positioning
+  - Use ImageRun with floating positioning + text frames over it
+  - Text content varies per RFP (institution name, RFP title, etc.)
+
+
+==================================================================
+FRONT MATTER DIVIDERS (AA-AD) - APPEAR BEFORE COVER LETTER
+==================================================================
+
+These four dividers form the proposal opening sequence in this order:
+
+ORDER 1: divider_AA_Page_Cover_text_overlay.jpg [TEXT OVERLAY]
+  -> Title Page / Cover Page
+  -> TEXT TO OVERLAY (rendered dynamically per RFP):
+     - Line 1: [Institution Name] (large, bold, brand red)
+     - Line 2: [RFP Title or RFP Number] (medium, white)
+     - Line 3: Submitted: [Submission Date] (small, white)
+     - Line 4: Submitted by: Propellant Media (small, white)
+  -> Position text in lower-left or upper-center area where image
+     has empty negative space designed for it
+
+ORDER 2: divider_AB_academic_logos.jpg [STATIC]
+  -> Academic Client Logos page
+  -> No text overlay - image is complete as-is
+  -> Renders immediately after Title Page
+
+ORDER 3: divider_AC_Growing_enrollment_page_text_overlay.jpg [TEXT OVERLAY]
+  -> Propellant Media Positioning / Value Prop page
+  -> TEXT TO OVERLAY (generic Propellant Media positioning -
+     same text every RFP):
+     - Headline: "Growing Enrollment for Forward-Thinking Institutions"
+     - Subhead/body copy: Propellant Media positioning statement
+       (3-4 sentences) about MWBE certification, Google Premier
+       status, higher education focus, AI-powered enrollment
+       marketing capabilities
+  -> Standard text - skill writes this same content for every RFP
+
+ORDER 4: divider_AD_Table_Of_Contents_text_overlay.jpg [TEXT OVERLAY]
+  -> Table of Contents
+  -> TEXT TO OVERLAY (dynamic per RFP):
+     - "Table of Contents" header
+     - Full TOC entries with section titles + page numbers + dot leaders
+     - Generated from final document structure
+  -> Note: TOC text overlays directly on the image. The image is
+     the design treatment; the TOC content sits on top.
+
+
+==================================================================
+MAIN PROPOSAL SECTIONS (1-16) - STATIC DIVIDERS
+==================================================================
+
+divider_01_cover_letter.png
+  -> Cover Transmittal Letter
+
+divider_02_executive_summary.png
+  -> Executive Summary
+
+divider_03_scope_of_services.png
+  -> Scope of Services Propellant Media Is Proposing
+
+divider_04_Company_Overview_Work_History.png
+  -> Propellant Media Overview & History of Propellant Media
+
+divider_05_your_account_team.png
+  -> Your Account Team & Our Expertise
+
+divider_06_strategic_planning_campaign_development.png
+  -> Strategic Planning & Campaign Development
+  (Maps to: Discovery, Strategic Planning, or Campaign Development sections
+   when an RFP names them separately from Scope of Services)
+
+divider_07_approach_campaign_launches_monitoring_budget_reconciliation.png
+  -> Our Approach to Campaign Launches, Monitoring & Budget Reconciliation
+
+divider_08_custom_crm_analytics_reporting.png
+  -> Custom Analytics, Dashboards & Reporting
+
+divider_09_crm_integration_full_funnel_attribution.png
+  -> CRM Integration & Campaign Attribution
+  (REQUIRED in every proposal regardless of RFP request)
+
+divider_10_website_landing_page_optimization.png
+  -> Website & Landing Page Optimization
+
+divider_11_propellant_media_optimizes_digital_marketing_campaigns.png
+  -> How Propellant Media Optimizes Campaigns
+
+divider_12_competitive_set_for_your_institution.png
+  -> The Competitive Landscape for [Institution Name]
+  (SWOT analysis required - never in Appendix)
+
+divider_13_emerging_digital_AI_powered_strategies.png
+  -> Emerging Digital & AI-Powered Strategies
+
+divider_14_creative_ideation_process_sample_ads.png
+  -> Creative Process & Ad Design Samples
+  (ALWAYS INCLUDE - changed in v6)
+
+divider_15_media_buying_media_plan.png
+  -> Media Buying & Media Plan
+  (Must open with exactly 3 paragraphs per v7 rules)
+
+divider_16_cost_proposal_pricing.png
+  -> Pricing & Budget Proposal
+  (Justin approves all pricing - flagged [NEEDS YOU])
+
+
+==================================================================
+APPENDIX SECTIONS (17-20) - STATIC DIVIDERS
+==================================================================
+
+divider_17_appendix_case_studies.png
+  -> Appendix: Case Studies
+  (Pulled from Case Study Library - matched to institution type)
+
+divider_18_appendix_resumes.png
+  -> Appendix: Resumes
+  (Aaron King resume must show 2015, never 2014)
+
+divider_19_appendix_references.png
+  -> Appendix: References
+  (KSU, FGCU, Stevens, Utah State - never Dutchess Community College)
+
+divider_20_appendix_required_documents_forms.png
+  -> Appendix: Required Documents & Forms
+  (W9, certificates of insurance, MWBE certification, addenda
+   acknowledgments, signed RFP forms)
+
+
+==================================================================
+FALLBACK / PLACEHOLDER (21) - STATIC DIVIDER
+==================================================================
+
+divider_21_sample_divider_placeholder.png
+  -> [Section Title - Custom Build Required]
+  (Auto-inserted when RFP requires a section that doesn't match
+   any of the 20 named dividers above. Diana builds custom
+   replacement before final PDF conversion.)
+
+
+COMPLETE PROPOSAL ASSEMBLY ORDER
+=================================
+
+1. divider_AA_Page_Cover_text_overlay.jpg [Cover Page with text overlay]
+2. divider_AB_academic_logos.jpg [Academic Logos]
+3. divider_AC_Growing_enrollment_page_text_overlay.jpg [PM Positioning]
+4. divider_AD_Table_Of_Contents_text_overlay.jpg [TOC with text overlay]
+5. divider_01_cover_letter.png + Cover Letter content
+6. divider_02_executive_summary.png + Executive Summary content
+7. divider_03_scope_of_services.png + Scope content
+8. [continue through divider_20]
+9. (custom dividers as needed using divider_21_sample_divider_placeholder.png)
+
+
+SECTION ORDER NOTES
+===================
+
+The order above follows the v7 template's Standard Section Order
+(Mode B - default when RFP is silent on structure).
+
+When an RFP prescribes a different order (Mode A) or names required
+sections without mandating full structure (Mode C):
+  - Match dividers by section CONTENT, not by number
+  - The rfp-engine skill will identify the closest matching divider
+    based on section topic
+  - If no clear match exists, use divider_21_sample_divider_placeholder.png
+  - Front matter dividers (AA-AD) ALWAYS appear in this order
+    regardless of TOC mode
+
+SECTIONS WITHOUT DEDICATED DIVIDERS
+====================================
+
+The following standard v7 sections do NOT have dedicated dividers
+because they are typically integrated into other sections or do not
+warrant a full-page divider:
+
+  - Specific Deliverables & Project Timeline
+    (Use divider_07 if RFP separates this from Approach section,
+     otherwise integrate into Approach section)
+
+If an RFP demands a dedicated divider for any of these,
+use divider_21_sample_divider_placeholder.png and flag for
+Diana to build a custom version.
+
+
+VERSION HISTORY
+===============
+
+v2.0 (May 2026) - Added 4 front matter dividers (AA-AD).
+Three of them (AA, AC, AD) require text overlay capability.
+Added global formatting rules (8.5x11, position 0,0, fit to page)
+and split divider behavior into Type 1 (static) vs Type 2 (text overlay).
+
+v1.0 (May 2026) - Initial mapping. Locked in 21 dividers as source
+of truth based on Diana's design batch. Replaces ad-hoc divider
+insertion that previously required 30-45 minutes of copy-paste
+per RFP submission.
