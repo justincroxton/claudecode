@@ -3,9 +3,12 @@
 For every opportunity a human has moved into `pipeline/approved/`, run the FULL `rfp-engine`
 skill drafting lifecycle. This is the heavy stage and runs only on human-approved winners.
 
-## Knowledge base check FIRST
-The `rfp-engine` skill needs five knowledge docs (Questions Checklist, Section Instruction
-Template, Win-Loss Feedback, SOP, Winning Proposals). Check `pipeline/knowledge/`:
+## Engine version + knowledge base check FIRST
+Use the engine spec at **`pipeline/knowledge/rfp-engine_SKILL_v4.md`** if present — it is newer
+than any globally-installed rfp-engine and governs the build (Canonical Case Study Library,
+full-bleed divider protocol, content routing, standing rules). Then load the knowledge docs in
+`pipeline/knowledge/` (Questions Checklist, Section Template v12, Win-Loss, SOP, Compliance Master,
+Winning Proposals, Divider Mapping). Check what's present:
 - **If present** — load them and draft at FULL fidelity: complete Questions-Checklist answers,
   the templated Poppins `.docx` per the Section Instruction Template, and winning-proposal
   structures/pricing models.
