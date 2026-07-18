@@ -20,7 +20,5 @@ pipeline/tmp/*
 pipeline/archive/*
 !pipeline/**/.gitkeep
 
-# rfp-engine knowledge base — proprietary win/loss + client docs (keep README only)
-pipeline/knowledge/*
-!pipeline/knowledge/README.md
-!pipeline/knowledge/.gitkeep
+# rfp-engine knowledge base — TRACKED so drafting has it every session (private repo).
+# (Contents are your proprietary win/loss + templates; they live here permanently.)
