@@ -13,7 +13,10 @@ Companion to `pm-case-study-engine` (which *produces* the PDF) and `pm-blog-engi
 
 ## Hard Rules
 
-1. **NEVER publish.** Always `status: draft`. Justin reviews and publishes by hand.
+1. **NEVER publish.** Always `status: draft` on create -- Justin reviews and publishes
+   by hand. On **update**, always pass `status` explicitly too: never leave it unset and
+   trust the default, or an edit can silently flip a draft live (or knock a published
+   item back to draft). Check the item's current status first and pass that same value.
 2. **NEVER name the client.** Anonymize every case study. See Anonymization below.
 3. **Publish the real metrics.** Do not band, round, or soften numbers -- if the PDF
    says $4,318 spend and a $37 CPL, the page says $4,318 and $37. (Justin, 2026-08-20.)
@@ -84,6 +87,80 @@ Follow the house structure. Headings are `<h3>` wrapping `<strong>`:
 
 Add sections when the source supports them (a `<h3><strong>Client Feedback</strong></h3>`
 pull quote, an extra results table). Never pad with sections the PDF cannot support.
+
+### Brand palette
+
+| Token | Hex |
+|---|---|
+| Propellant red | `#E63412` |
+| Charcoal | `#2B2B2B` |
+| Grid / rule | `#dcdcdc` |
+| Zebra fill | `#f7f7f7` |
+| Muted label | `#8a8a8a` |
+
+There is no way to add theme CSS from here, so every style is an inline `style`
+attribute. Inline styles beat the theme stylesheet, so they hold.
+
+### Lists — use real `<ul>`, never bullet characters
+
+Some older portfolio items fake bullets with `•` and `<br />` inside a `<p>`. **Do not
+copy that.** It renders as a grey wall of text. A real `<ul><li>` picks up the theme's
+branded red circled-check bullets, which is the look Justin wants. Match the WordPress
+editor's own list formatting (a space and a tab before each `<li>`):
+
+```html
+<ul>
+ 	<li><strong>Label:</strong> value</li>
+</ul>
+```
+
+Numbered takeaways stay an `<ol>`.
+
+### Tables — always style them
+
+An unstyled `<table>` renders borderless and unreadable on this theme. Every data table
+gets: a Propellant-red header row with white text, a 1px `#dcdcdc` grid on every cell,
+`#f7f7f7` zebra striping on alternating rows, right-aligned numeric columns, and a
+charcoal total row with white bold text.
+
+```html
+<table style="width:100%;border-collapse:collapse;margin:28px 0;font-size:16px;">
+<thead><tr style="background-color:#E63412;">
+<th style="padding:14px 16px;text-align:left;color:#ffffff;font-weight:600;border:1px solid #E63412;font-size:15px;letter-spacing:0.3px;">Channel</th>
+...
+</tr></thead>
+<tbody>
+<tr><td style="padding:12px 16px;border:1px solid #dcdcdc;text-align:left;">...</td>...</tr>
+<tr style="background-color:#f7f7f7;">...</tr>
+<tr style="background-color:#2B2B2B;"><td style="...;color:#ffffff;font-weight:700;">Total</td>...</tr>
+</tbody></table>
+```
+
+### Rebuild the PDF's charts as HTML, don't lift them as bitmaps
+
+The designed panels in a Propellant case study -- the share-of-delivery stacked bar, the
+completion-rate bars, the stat tiles -- are vector. Rebuild them as inline-styled HTML
+rather than cropping them to PNG. It is crisp at every resolution, reflows on mobile,
+needs no media staging, and stays editable.
+
+Two patterns that work:
+
+- **Stacked share bar:** a wrapper `div` at `width:100%;font-size:0;line-height:0;
+  border-radius:3px;overflow:hidden;` holding one `<span style="display:inline-block;
+  width:<pct>%;height:32px;background:<hex>;">` per segment. `font-size:0` on the parent
+  kills the whitespace gaps between inline-blocks. Put the largest segment in charcoal
+  `#1A1A1A` and the hero segment in Propellant red, then step down through greys.
+- **Horizontal bar chart:** a borderless `<table>`, one row per bar -- label cell, a
+  track cell (`<span style="display:block;background:#EDEDED;height:22px;">` wrapping a
+  `<span>` at `width:<pct>%` in red or `#C9C9C9`), and a right-aligned value cell.
+  Bar widths are the real percentages, never rescaled to exaggerate a gap.
+
+Wrap each in `border:1px solid #e5e5e5;border-radius:10px;padding:24px;` to echo the
+card treatment in the PDF.
+
+**Emit each graphic as one single line of HTML with no internal newlines.** WordPress
+runs `wpautop` on the content and will inject `<br />` and `<p>` tags at line breaks
+inside your markup, which shatters the layout.
 
 ### Graphics, tables, icons, quotes
 
@@ -226,7 +303,7 @@ from the page. Ask first; not every case study should ship its PDF publicly.
      headers: {Content-Type: application/json}
      body: "{\"slug\":\"...\"}"
    ```
-10. **Verify** by reading the created item back (`context=edit`) -- confirm the shortcode
+9. **Verify** by reading the created item back (`context=edit`) -- confirm the shortcode
    wrapper survived, images resolve, and status is `draft`.
 11. **Report** the preview link, the categories assigned, and anything the PDF did not
     supply.
@@ -239,7 +316,10 @@ from the page. Ask first; not every case study should ship its PDF publicly.
 - [ ] Content wrapped in the `[vc_row]...[/vc_row]` shortcode
 - [ ] Headings are `<h3><strong>`
 - [ ] Every image resolves and carries a `wp-image-<ID>` class
-- [ ] Tables are real HTML where the source allowed it
+- [ ] Tables are real HTML where the source allowed it, and styled (red header, grid,
+      zebra, charcoal total row)
+- [ ] Bullets are real `<ul><li>`, not `•` characters with `<br />`
+- [ ] Charts rebuilt as inline-styled HTML, each emitted on a single line
 - [ ] Quotes attributed by role and org type only
 - [ ] A vertical category is set; services match the media plan; not `Uncategorized`
 - [ ] Featured image set from Justin's upload
