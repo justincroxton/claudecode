@@ -303,8 +303,27 @@ from the page. Ask first; not every case study should ship its PDF publicly.
      headers: {Content-Type: application/json}
      body: "{\"slug\":\"...\"}"
    ```
-9. **Verify** by reading the created item back (`context=edit`) -- confirm the shortcode
-   wrapper survived, images resolve, and status is `draft`.
+10. **Verify.** Read the item back and confirm the shortcode wrapper survived, images
+    resolve, categories and featured image are intact, and the status is what you
+    intended.
+
+    A content body of this size routinely times out. There are two separate limits --
+    the Zapier MCP transport at 60s and Zapier's own task execution at 30s -- and
+    **neither means the write failed.** Both have returned a timeout while WordPress
+    committed the change. Do not re-send; a blind retry risks clobbering good content.
+    Check `modified_gmt`, then prove the body is intact by searching for three phrases:
+    one from the opening, one from the middle, one from the very last paragraph. Three
+    hits means nothing was truncated.
+    ```
+    url: https://propellant.media/wp-json/wp/v2/portfolio-item
+    querystring: {search: "<phrase unique to the new content>", _fields: "id,slug"}
+    ```
+    Read `date_gmt` and `featured_media` before assuming an unexpected status change was
+    yours -- Justin publishes and attaches thumbnails by hand, and those timestamps tell
+    you who did what. Yoast's "Est. reading time" can also lag after a timed-out write,
+    since the interrupted request may not finish Yoast's indexable refresh; it corrects
+    on the next save. A stale reading time is not evidence the content failed to save --
+    the phrase search is the reliable check.
 11. **Report** the preview link, the categories assigned, and anything the PDF did not
     supply.
 
