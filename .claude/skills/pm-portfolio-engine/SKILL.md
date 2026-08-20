@@ -136,6 +136,41 @@ charcoal total row with white bold text.
 </tbody></table>
 ```
 
+### FAQ block — accordion, and mind the heading levels
+
+Close a case study with an FAQ. It is the strongest AEO/SEO addition available: the
+questions match what people and AI engines actually search, and every answer can be
+anchored to a real number from the PDF. Lead each answer with the answer in its first
+sentence.
+
+Render it as a **native `<details>`/`<summary>` accordion** -- no plugin, no JavaScript,
+works with the theme's CSS disabled, and the answer text stays in the DOM so search
+engines still index collapsed content. Do not reach for the site's Easy Accordion plugin
+(`sp_easy_accordion` / `sp_accordion_faqs`); it needs separate CPT entries per item and
+buys nothing here.
+
+**Heading levels matter.** The section header is an `<h3>` like every other section. Each
+question is an `<h4>` *inside* the `<summary>` -- valid HTML, keeps the document outline
+correct, and gives the question a smaller visual weight so it does not compete with the
+section header. Set the size explicitly; the theme may render h3 and h4 at nearly the
+same size, which is what makes an unstyled pair look wrong.
+
+Open the first item (`<details open>`) so the section does not read as an empty stack.
+As with every graphic, emit each `<details>` on one line.
+
+```html
+<h3><strong>Frequently Asked Questions</strong></h3>
+<details open style="border:1px solid #e5e5e5;border-radius:8px;margin:0 0 12px;background:#ffffff;"><summary style="cursor:pointer;padding:16px 20px;font-size:0;"><h4 style="display:inline;font-size:18px;line-height:1.5;font-weight:700;color:#2B2B2B;margin:0;">Question?</h4></summary><div style="padding:0 20px 18px;border-top:1px solid #f0f0f0;"><p style="margin:14px 0 0;">Answer, leading with the answer.</p></div></details>
+```
+
+`font-size:0` on the `<summary>` collapses the whitespace around the inline `<h4>`; the
+h4's own font-size restores the text.
+
+**Verifying a markup-only change:** when an edit changes structure but not wording, a
+phrase search cannot tell the new version from the old. Search a markup string unique to
+the new build instead -- `border-radius:8px` for the accordion shell, `cursor:pointer`
+for the summary -- which also proves the tags survived WordPress's kses filtering.
+
 ### Rebuild the PDF's charts as HTML, don't lift them as bitmaps
 
 The designed panels in a Propellant case study -- the share-of-delivery stacked bar, the
