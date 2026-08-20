@@ -87,6 +87,19 @@ The command lives in [`.claude/skills/qualify-rfps/SKILL.md`](.claude/skills/qua
 
 ---
 
+## 3. Publish a case study — `pm-portfolio-engine`
+
+Upload a case study PDF and ask Claude to post it to the portfolio. It extracts the
+narrative, metrics, charts, tables, and quotes, anonymizes the client, and creates a
+**draft** `portfolio-item` on propellant.media with the graphics uploaded to the media
+library.
+
+Drafts only — Justin reviews and publishes by hand. The skill lives in
+[`.claude/skills/pm-portfolio-engine/SKILL.md`](.claude/skills/pm-portfolio-engine/SKILL.md)
+and carries the verified WordPress structure, anonymization rules, and category map.
+
+---
+
 ## Optional: standalone automated backend (advanced)
 
 This repo also contains a self-contained Python scraper (`main.py` + `sources/`)
