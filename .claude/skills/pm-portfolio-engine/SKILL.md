@@ -18,6 +18,9 @@ Companion to `pm-case-study-engine` (which *produces* the PDF) and `pm-blog-engi
 3. **Publish the real metrics.** Do not band, round, or soften numbers -- if the PDF
    says $4,318 spend and a $37 CPL, the page says $4,318 and $37. (Justin, 2026-08-20.)
 4. **NEVER invent a number, quote, or result** that is not in the source document.
+   If the PDF contradicts itself (e.g. a flight window in the fact box that disagrees
+   with the date range in a verification footnote), use the primary field, and tell
+   Justin about the conflict rather than silently picking.
 5. **Always dedup** against the existing portfolio items before creating anything.
 6. **The featured image is Justin's.** Never auto-assign a grid thumbnail; ask for it.
 
@@ -127,6 +130,7 @@ Food/Restaurant `5796` · Home Care Services `5791` · Non Profit `4451` ·
 Cannabis/CBD/Hemp `5898` · Furniture `4` · B2B Marketing `4486`
 
 **Services:** Geofencing Advertising `181` · Addressable Geofencing `5793` ·
+Digital Out Of Home `6756` ·
 Programmatic Display `182` · Programmatic Video `5799` · OTT Advertising `4271` ·
 Pre-Roll Video `5829` · YouTube Advertising `5827` · Google Ads `5823` ·
 Paid Search `119` · Facebook/IG Advertising `5800` · Keyword Contextual/Search `5792` ·
@@ -184,8 +188,16 @@ from the page. Ask first; not every case study should ship its PDF publicly.
 
 ## Workflow
 
-1. **Read the PDF.** Use the `pdf` skill. Extract narrative text, every metric, tables,
-   and images.
+1. **Read the PDF.** The sandbox has no poppler (`pdftotext`/`pdfimages` are absent)
+   and the system `cryptography` build is broken, so `pypdf` and `pdfplumber` fail on
+   import. `pip install pymupdf` works and handles text, images and page rendering.
+
+   **Check what is actually raster before planning any upload.** A Propellant-designed
+   case study is mostly vector text and shapes -- its charts, stat tiles and tables are
+   drawn, not embedded, so `get_images()` may return nothing but the logo. Use
+   `page.get_image_rects(xref)` to check placement: a ~74x22pt box at the top-left is
+   the letterhead logo, not content. Rebuild vector charts and tables as HTML; only
+   upload rasters that are genuinely images (dashboard screenshots, photos).
 2. **Confirm setup with Justin:** the image staging route, the featured image, and
    whether to attach the source PDF.
 3. **Dedup.** Pull existing slugs and titles; abort on a match.
@@ -197,16 +209,26 @@ from the page. Ask first; not every case study should ship its PDF publicly.
 5. **Anonymize** and re-read for leaked proper nouns.
 6. **Assign categories** -- vertical plus services.
 7. **Upload media**, capture IDs and URLs, embed.
-8. **Create the draft:**
+8. **Create the draft.** `post_type` goes at the top level; everything else nests
+   under `dynamic_properties`:
    ```
    wordpress_create_post
      post_type: "portfolio-item"
-     status: "draft"
-     title / content / categories / featured_media
+     dynamic_properties: {title, content, status: "draft", categories: ["4133", ...]}
    ```
-9. **Verify** by reading the created item back (`context=edit`) -- confirm the shortcode
+   Category IDs are passed as an array of **strings**.
+9. **Set the slug.** `slug` is not in the create action's schema, and WordPress leaves
+   it empty on drafts (`generated_slug` only previews it). Set it explicitly after:
+   ```
+   wordpress_make_api_mutating_request
+     url: https://propellant.media/wp-json/wp/v2/portfolio-item/<id>
+     method: POST
+     headers: {Content-Type: application/json}
+     body: "{\"slug\":\"...\"}"
+   ```
+10. **Verify** by reading the created item back (`context=edit`) -- confirm the shortcode
    wrapper survived, images resolve, and status is `draft`.
-10. **Report** the preview link, the categories assigned, and anything the PDF did not
+11. **Report** the preview link, the categories assigned, and anything the PDF did not
     supply.
 
 ## QA Checklist
@@ -221,4 +243,6 @@ from the page. Ask first; not every case study should ship its PDF publicly.
 - [ ] Quotes attributed by role and org type only
 - [ ] A vertical category is set; services match the media plan; not `Uncategorized`
 - [ ] Featured image set from Justin's upload
-- [ ] Slug is descriptive and anonymized
+- [ ] Slug is descriptive and anonymized (set explicitly -- drafts have none)
+- [ ] Flag to Justin: Yoast writes no meta description for portfolio items, so the
+      page ships without one unless he wants it set
