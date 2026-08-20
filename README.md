@@ -98,6 +98,17 @@ Drafts only — Justin reviews and publishes by hand. The skill lives in
 [`.claude/skills/pm-portfolio-engine/SKILL.md`](.claude/skills/pm-portfolio-engine/SKILL.md)
 and carries the verified WordPress structure, anonymization rules, and category map.
 
+In Claude Code the skill triggers on its own, so all you need is:
+
+```
+Post this case study to the Propellant portfolio. Draft only, anonymize the client,
+keep the real metrics.
+```
+
+For anywhere the skill isn't loaded — a Claude Project, a scheduled routine, a fresh
+chat — [`PROMPT.md`](.claude/skills/pm-portfolio-engine/PROMPT.md) holds a portable,
+paste-whole version of the same instructions.
+
 ---
 
 ## Optional: standalone automated backend (advanced)

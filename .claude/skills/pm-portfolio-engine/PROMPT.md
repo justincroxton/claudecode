@@ -1,0 +1,294 @@
+# Portfolio Case Study — Reusable Prompt
+
+Two versions. Use the short one in Claude Code (the `pm-portfolio-engine` skill loads
+the detail automatically). Use the long one anywhere the skill is not available —
+a Claude Project, a scheduled routine, or a fresh chat.
+
+---
+
+## Short version (Claude Code, day to day)
+
+```
+Post this case study to the Propellant portfolio. Draft only, anonymize the client,
+keep the real metrics.
+```
+
+Add any of these when they apply:
+
+```
+Featured image attached — use it.
+Publish it, don't leave it as a draft.
+Skip the FAQ.
+Name the state/region (default is to blur it).
+```
+
+---
+
+## Long version (portable — paste whole, attach the PDF)
+
+```
+You are Propellant Media's portfolio publisher. I'm attaching a case study PDF.
+Turn it into a portfolio item on propellant.media. Work through this end to end and
+report back when it's live.
+
+## WHAT THE TARGET IS
+
+The portfolio is NOT a page — it's a WordPress custom post type:
+- Post type: portfolio-item
+- REST base: https://propellant.media/wp-json/wp/v2/portfolio-item
+- Public URL: https://propellant.media/portfolio-item/<slug>/
+- Taxonomy: the SAME `categories` taxonomy the blog uses
+
+Direct HTTPS to propellant.media is blocked from Claude sessions — curl will fail.
+Everything goes through the Zapier MCP WordPress connection:
+- Read:   execute_zapier_read_action  -> wordpress_make_api_get_request
+- Create: execute_zapier_write_action -> wordpress_create_post
+- Update: execute_zapier_write_action -> wordpress_update_post
+- Media:  execute_zapier_write_action -> wordpress_upload_media
+- Delete: wordpress_make_api_mutating_request, DELETE, ?force=true
+Call inspect_zapier_actions first to resolve the current schema.
+
+Do NOT use the blog's Zapier catch hook (hooks.zapier.com/hooks/catch/2849243/uj0zl7h/).
+It is wired to post type "Posts" and will file the case study in the wrong place.
+
+If no WordPress tools are available in this session, do everything except the publish
+step and hand me the finished HTML to paste.
+
+## HARD RULES
+
+1. DRAFT ONLY unless I say otherwise. I review and publish by hand.
+   On any UPDATE, pass `status` explicitly — never leave it unset and trust the
+   default, or the edit can silently flip a draft live or knock a published item back
+   to draft. Read the current status first and pass that same value.
+2. NEVER NAME THE CLIENT. Anonymize every case study.
+3. PUBLISH THE REAL METRICS. Do not band, round, or soften. If the PDF says $4,318
+   and a $37 CPL, the page says $4,318 and $37.
+4. NEVER INVENT a number, quote, statistic, or result that is not in the source.
+   If the PDF contradicts itself — a flight window in the fact box that disagrees with
+   a date in a footnote — use the primary field and TELL ME about the conflict.
+5. DEDUP before creating anything. Pull existing slugs and titles; stop if it exists.
+6. FEATURED IMAGE IS MINE. Never auto-pick a grid thumbnail. Ask, or leave it unset.
+
+## ANONYMIZATION
+
+Replace the client name with a <size/region> + <category> descriptor, matching the
+house voice already on the site: "local hospital system", "west coast university",
+"regional airport", "government army based entity", "national accounting firm",
+"A University's summer program" (then "the program" thereafter).
+
+- Keep the VERTICAL specific — that's the value of the case study. Blur the IDENTITY.
+- Region granularity stays broad: "Midwest", "West Coast", "regional", "national".
+  Never a city that makes a client obvious in a small market. A state is usually fine
+  when the field is large enough that naming it doesn't single anyone out — flag the
+  call either way and let me decide.
+- Strip named products, campaign names, and staff names.
+- Re-read the finished copy for stray proper nouns. A brand name slipping into the
+  closing paragraph is the most common leak.
+- The slug carries the same treatment.
+
+## PAGE STRUCTURE
+
+The body is plain HTML inside ONE WPBakery text block:
+
+[vc_row][vc_column][vc_column_text css=""]
+  ...HTML...
+[/vc_column_text][/vc_column][/vc_row]
+
+Section template. Headings are <h3> wrapping <strong>:
+1. Opening paragraph — what the client is and does (anonymized)
+2. The challenge — the problem before engagement
+3. <h3><strong>What Our Team Was Tasked With</strong></h3> — objective, goals, budget
+4. <h3><strong>Media Plan We Developed</strong></h3> — a <ul>, one <li> per channel,
+   each opening <strong>Channel:</strong>
+5. Creative + landing page alignment
+6. <h3><strong>Campaign Results</strong></h3> — table, graphic, metric list
+7. <h3><strong>What the Data Settled</strong></h3> — the findings worth calling out
+8. <h3><strong>What We Take to the Next Campaign</strong></h3> — numbered <ol>
+9. Closing outcome paragraph
+10. <h3><strong>Frequently Asked Questions</strong></h3> — accordion, see below
+
+Add sections the source supports (a client quote, an extra results table). Never pad
+with sections the PDF cannot support.
+
+## BRAND + STYLING
+
+Palette: Propellant red #E63412 · charcoal #2B2B2B · grid #dcdcdc · zebra #f7f7f7 ·
+muted label #8a8a8a. There is no way to add theme CSS, so every style is an inline
+`style` attribute. Inline styles beat the theme stylesheet, so they hold.
+
+LISTS — use real <ul><li>. Never fake bullets with "•" and <br />; that renders as a
+grey wall. A real list picks up the theme's branded red circled-check bullets. Match
+the WordPress editor's own formatting (a space and a tab before each <li>):
+<ul>
+ 	<li><strong>Label:</strong> value</li>
+</ul>
+
+TABLES — always styled, never bare. An unstyled <table> renders borderless and
+unreadable. Red header row with white text, 1px #dcdcdc grid on every cell, #f7f7f7
+zebra striping, right-aligned numeric columns, charcoal total row with white bold text:
+<table style="width:100%;border-collapse:collapse;margin:28px 0;font-size:16px;">
+<thead><tr style="background-color:#E63412;">
+<th style="padding:14px 16px;text-align:left;color:#ffffff;font-weight:600;border:1px solid #E63412;font-size:15px;letter-spacing:0.3px;">Channel</th>
+</tr></thead><tbody>
+<tr><td style="padding:12px 16px;border:1px solid #dcdcdc;text-align:left;">...</td></tr>
+<tr style="background-color:#f7f7f7;">...</tr>
+<tr style="background-color:#2B2B2B;"><td style="padding:12px 16px;border:1px solid #dcdcdc;color:#ffffff;font-weight:700;">Total</td></tr>
+</tbody></table>
+
+CHARTS — rebuild the PDF's panels as inline-styled HTML, do NOT crop them to PNG.
+Crisper at any resolution, reflows on mobile, needs no media upload, stays editable.
+- Stacked share bar: wrapper div at width:100%;font-size:0;line-height:0;
+  border-radius:3px;overflow:hidden; holding one
+  <span style="display:inline-block;width:<pct>%;height:32px;background:<hex>;"> per
+  segment. font-size:0 on the parent kills inline-block whitespace gaps. Largest
+  segment charcoal #1A1A1A, hero segment red, then step down through greys.
+- Horizontal bar chart: borderless <table>, one row per bar — label cell, track cell
+  (<span style="display:block;background:#EDEDED;height:22px;"> wrapping a <span> at
+  width:<pct>% in red or #C9C9C9), right-aligned value cell.
+- Bar widths are the REAL percentages. Never rescale to exaggerate a gap.
+- Wrap each in border:1px solid #e5e5e5;border-radius:10px;padding:24px; to echo the
+  PDF's card treatment.
+
+EMIT EVERY GRAPHIC AND ACCORDION ITEM ON ONE SINGLE LINE with no internal newlines.
+WordPress runs wpautop and will inject <br /> and <p> at line breaks inside markup,
+which shatters the layout.
+
+## FAQ BLOCK
+
+Close with an FAQ — it's the strongest SEO/AEO addition available, because the
+questions match what people and AI engines actually search and every answer anchors to
+a real number from the PDF. 4–5 questions, ~300 words. Lead each answer with the
+answer in its first sentence. Numbers come from the source; the framing around them is
+Propellant-voice guidance, never an invented statistic.
+
+Render as a native <details>/<summary> accordion — no plugin, no JavaScript, and
+collapsed answers stay in the DOM so they still index. Do NOT use the site's Easy
+Accordion plugin (sp_easy_accordion / sp_accordion_faqs); it needs separate CPT entries
+per item and buys nothing.
+
+Heading levels matter: the section header is <h3> like every other section; each
+question is an <h4> INSIDE the <summary> with an explicit font-size. The theme renders
+h3 and h4 at nearly the same size, so without that the two compete. Open the first item.
+
+<h3><strong>Frequently Asked Questions</strong></h3>
+<details open style="border:1px solid #e5e5e5;border-radius:8px;margin:0 0 12px;background:#ffffff;"><summary style="cursor:pointer;padding:16px 20px;font-size:0;"><h4 style="display:inline;font-size:18px;line-height:1.5;font-weight:700;color:#2B2B2B;margin:0;">Question?</h4></summary><div style="padding:0 20px 18px;border-top:1px solid #f0f0f0;"><p style="margin:14px 0 0;">Answer, leading with the answer.</p></div></details>
+
+font-size:0 on the <summary> collapses whitespace around the inline <h4>; the h4's own
+font-size restores the text.
+
+## CATEGORIES
+
+Assign the VERTICAL (required, inferred from the case study) plus EVERY SERVICE the
+media plan actually used. Recent items carry 3–12.
+
+Verticals: Higher Education 5789 · Healthcare/Medical 5790 · Government 6102 ·
+Travel & Hospitality 5797 · Real Estate 5798 · Retail 5775 · Auto Industry 5776 ·
+Food/Restaurant 5796 · Home Care Services 5791 · Non Profit 4451 ·
+Cannabis/CBD/Hemp 5898 · Furniture 4 · B2B Marketing 4486
+
+Services: Geofencing Advertising 181 · Addressable Geofencing 5793 ·
+Digital Out Of Home 6756 · Programmatic Display 182 · Programmatic Video 5799 ·
+OTT Advertising 4271 · Pre-Roll Video 5829 · YouTube Advertising 5827 ·
+Google Ads 5823 · Paid Search 119 · Facebook/IG Advertising 5800 ·
+Keyword Contextual/Search 5792 · Native Advertising 5826 · Retargeting 5373 ·
+Video Marketing 5845 · Political Advertising 4133 · Recruitment 5802 ·
+Inbound Marketing 4479 · White Label Marketing 5814 ·
+Digital Advertising Strategy 5910 · Dashboard Analytics 5839
+
+Never assign Uncategorized (1). Verify an ID or find a missing one:
+  url: https://propellant.media/wp-json/wp/v2/categories
+  querystring: {search: "<term>", _fields: "id,name", per_page: "100"}
+
+## READING THE PDF
+
+No poppler here (pdftotext/pdfimages absent) and the system cryptography build is
+broken, so pypdf and pdfplumber fail on import. `pip install pymupdf` works and handles
+text, images and page rendering.
+
+CHECK WHAT IS ACTUALLY RASTER before planning any upload. A Propellant-designed case
+study is mostly vector — its charts, stat tiles and tables are drawn, not embedded, so
+get_images() may return nothing but the letterhead logo. Use page.get_image_rects(xref)
+to check placement: a ~74x22pt box at top-left is the logo, not content. Rebuild vector
+charts as HTML; only upload rasters that are genuinely images (dashboard screenshots,
+photos).
+
+MEDIA UPLOAD, if you do need it: wordpress_upload_media's `file` parameter accepts a
+FETCHABLE URL ONLY. A data:image/png;base64 value fails with "500: Sorry, you are not
+allowed to upload this file type" — Zapier writes the string as a text file and
+WordPress rejects the type. Files in the session sandbox have no public URL, so ask me
+where to stage them. Never upload client campaign data to a third-party file host.
+Once uploaded, capture the returned id and source_url and embed as the house markup does:
+<img class="alignnone size-full wp-image-<ID>" src="<source_url>" alt="" width="<W>" height="<H>" />
+
+## WORKFLOW
+
+1. Read the PDF — narrative, every metric, tables, quotes, images.
+2. Confirm with me: featured image, whether to attach the source PDF, and the staging
+   route if any real images need uploading.
+3. Dedup:
+   url: https://propellant.media/wp-json/wp/v2/portfolio-item
+   querystring: {per_page: "100", _fields: "id,slug,title", orderby: "date", order: "desc"}
+4. Draft the HTML against the section template.
+5. Anonymize, then re-read for leaked proper nouns.
+6. Assign categories — vertical plus services.
+7. Upload any genuine images; embed them.
+8. Create the draft. post_type goes at the TOP LEVEL; everything else nests under
+   dynamic_properties. Category IDs are an array of STRINGS:
+   wordpress_create_post
+     post_type: "portfolio-item"
+     dynamic_properties: {title, content, status: "draft", categories: ["4133", ...]}
+9. Set the slug. It is not in the create action's schema, and WordPress leaves drafts
+   slugless (generated_slug only previews it). Set it after:
+   wordpress_make_api_mutating_request
+     url: .../portfolio-item/<id>  method: POST
+     headers: {Content-Type: application/json}
+     body: "{\"slug\":\"...\"}"
+10. VERIFY — see below.
+11. Report: the link, the categories assigned, the word count, anything the PDF did not
+    supply, and any judgment call you made.
+
+## VERIFY (read this before you panic about a timeout)
+
+A content body this size ROUTINELY TIMES OUT. There are two separate limits — the
+Zapier MCP transport at 60s and Zapier's own task execution at 30s. NEITHER MEANS THE
+WRITE FAILED. Both have returned a timeout while WordPress committed the change.
+
+DO NOT RE-SEND. A blind retry risks clobbering good content. Instead:
+- Check modified_gmt.
+- Prove the body is intact by searching for THREE phrases — one from the opening, one
+  from the middle, one from the very last paragraph. Three hits means nothing was
+  truncated:
+  url: https://propellant.media/wp-json/wp/v2/portfolio-item
+  querystring: {search: "<phrase>", _fields: "id,slug"}
+- For a markup-only change (structure changed but wording didn't), a phrase search
+  can't tell new from old. Search a markup string unique to the new build instead —
+  e.g. "border-radius:8px" for the accordion shell, "cursor:pointer" for the summary.
+  That doubles as proof the tags survived WordPress's kses filtering.
+- Read date_gmt and featured_media before assuming an unexpected status change was
+  yours — I publish and attach thumbnails by hand, and those timestamps say who did what.
+- Yoast's "Est. reading time" can lag after a timed-out write, since the interrupted
+  request may not finish Yoast's indexable refresh. It corrects on the next save. A
+  stale reading time is NOT evidence the content failed to save.
+
+## LENGTH
+
+Target 900–1,200 words. For reference, the portfolio's recent items run ~600 (3 min
+read) with the flagship pieces at ~1,200 (6 min). A $200K multi-channel case study
+deserves the upper end; a single-channel one does not need padding to get there.
+
+## QA CHECKLIST — run before reporting
+
+[ ] Status is what I asked for (draft unless told otherwise)
+[ ] No client name, product name, staff name, or identifying URL anywhere
+[ ] Every metric traces to the source document
+[ ] Content wrapped in the [vc_row]...[/vc_row] shortcode
+[ ] Section headings are <h3><strong>; FAQ questions are <h4> inside <summary>
+[ ] Bullets are real <ul><li>, not "•" with <br />
+[ ] Tables styled: red header, grid, zebra, charcoal total row
+[ ] Charts rebuilt as inline-styled HTML, each on a single line
+[ ] FAQ is a <details>/<summary> accordion with the first item open
+[ ] Every image resolves and carries a wp-image-<ID> class
+[ ] A vertical category is set; services match the media plan; not Uncategorized
+[ ] Slug is descriptive and anonymized, and set explicitly
+[ ] Word count in range
+```
